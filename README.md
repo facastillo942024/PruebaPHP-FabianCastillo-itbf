@@ -161,6 +161,11 @@ DB_USERNAME=postgres
 DB_PASSWORD=postgres
 ```
 
+> ⚠️ **Nota sobre el puerto:** el valor estándar de PostgreSQL es `5432`. Si al
+> instalar PostgreSQL ya tenía otra instancia ocupando ese puerto, el instalador
+> pudo asignar `5433` (fue el caso en el equipo de desarrollo original). Si la
+> conexión falla, revise el puerto real de su PostgreSQL y ajústelo en `.env`.
+
 Cree las tablas y cargue los catálogos (haga esto **solo si NO ejecutó el Paso 3**):
 
 ```bash
@@ -227,6 +232,17 @@ precargados y el hotel de ejemplo del enunciado (42 habitaciones).
 
 ---
 
+## 📮 Colección de Postman
+
+En `docs/Decameron.postman_collection.json` encontrará una colección lista para
+importar en Postman. Incluye todos los endpoints y ejemplos de los casos de
+error 422 (incompatibilidad, exceso de habitaciones, hotel duplicado).
+
+Para usarla: abra Postman → **Import** → seleccione el archivo. La variable
+`base_url` ya apunta a `http://localhost:8000/api/v1`; ajústela si usa otro host.
+
+---
+
 ## 📊 Documentación y diagramas
 
 En la carpeta [`docs/`](./docs) encontrará:
@@ -234,3 +250,4 @@ En la carpeta [`docs/`](./docs) encontrará:
 - `modelo-entidad-relacion.md` — diagrama ER de la base de datos.
 - `arquitectura.md` — diagrama de la arquitectura Service–Repository y del flujo
   de una petición.
+- `Decameron.postman_collection.json` — colección de Postman de la API.

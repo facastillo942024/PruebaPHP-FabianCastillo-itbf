@@ -1,0 +1,206 @@
+{
+  "info": {
+    "name": "Decameron - Gestión Hotelera API",
+    "description": "Colección de la API RESTful del sistema de gestión hotelera Decameron.\n\nBase: {{base_url}} (por defecto http://localhost:8000/api/v1)\n\nIncluye los endpoints de catálogos, hoteles (CRUD) y asignación de habitaciones, con ejemplos de los casos de error 422.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "hotel_id",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Catálogos",
+      "item": [
+        {
+          "name": "Obtener catálogos",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/catalogs",
+              "host": ["{{base_url}}"],
+              "path": ["catalogs"]
+            },
+            "description": "Devuelve ciudades, tipos de habitación, acomodaciones y la matriz de compatibilidad."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Hoteles",
+      "item": [
+        {
+          "name": "Listar hoteles",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/hotels",
+              "host": ["{{base_url}}"],
+              "path": ["hotels"]
+            },
+            "description": "Lista todos los hoteles con sus habitaciones, total asignado y disponible."
+          }
+        },
+        {
+          "name": "Crear hotel",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"DECAMERON SAN ANDRES\",\n  \"address\": \"AV COLOMBIA 1-100\",\n  \"city_id\": 2,\n  \"nit\": \"90012345-6\",\n  \"max_rooms\": 60\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/hotels",
+              "host": ["{{base_url}}"],
+              "path": ["hotels"]
+            },
+            "description": "Registra un hotel nuevo. Responde 201. Si el nombre o NIT ya existen, responde 422."
+          }
+        },
+        {
+          "name": "Crear hotel - NIT/nombre duplicado (422)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"DECAMERON CARTAGENA\",\n  \"address\": \"OTRA DIRECCION\",\n  \"city_id\": 1,\n  \"nit\": \"12345678-9\",\n  \"max_rooms\": 20\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/hotels",
+              "host": ["{{base_url}}"],
+              "path": ["hotels"]
+            },
+            "description": "Ejemplo de rechazo por hotel repetido (nombre y NIT ya existentes)."
+          }
+        },
+        {
+          "name": "Detalle de un hotel",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/hotels/{{hotel_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["hotels", "{{hotel_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar hotel",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"DECAMERON CARTAGENA\",\n  \"address\": \"CALLE 23 58-25\",\n  \"city_id\": 1,\n  \"nit\": \"12345678-9\",\n  \"max_rooms\": 50\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/hotels/{{hotel_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["hotels", "{{hotel_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar hotel",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/hotels/{{hotel_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["hotels", "{{hotel_id}}"]
+            },
+            "description": "Elimina el hotel y, en cascada, sus habitaciones. Responde 204."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Asignación de habitaciones",
+      "item": [
+        {
+          "name": "Asignar habitación (válida)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"room_type_id\": 3,\n  \"accommodation_id\": 3,\n  \"quantity\": 5\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/hotels/{{hotel_id}}/rooms",
+              "host": ["{{base_url}}"],
+              "path": ["hotels", "{{hotel_id}}", "rooms"]
+            },
+            "description": "SUITE + TRIPLE es una combinación válida. Responde 201."
+          }
+        },
+        {
+          "name": "Incompatible: ESTANDAR + TRIPLE (422)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"room_type_id\": 1,\n  \"accommodation_id\": 3,\n  \"quantity\": 5\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/hotels/{{hotel_id}}/rooms",
+              "host": ["{{base_url}}"],
+              "path": ["hotels", "{{hotel_id}}", "rooms"]
+            },
+            "description": "ESTANDAR no admite TRIPLE. Responde 422."
+          }
+        },
+        {
+          "name": "Excede máximo de habitaciones (422)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"room_type_id\": 2,\n  \"accommodation_id\": 4,\n  \"quantity\": 9999\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/hotels/{{hotel_id}}/rooms",
+              "host": ["{{base_url}}"],
+              "path": ["hotels", "{{hotel_id}}", "rooms"]
+            },
+            "description": "La cantidad supera el máximo del hotel. Responde 422."
+          }
+        }
+      ]
+    }
+  ]
+}
