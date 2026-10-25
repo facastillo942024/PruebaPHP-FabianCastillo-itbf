@@ -1,0 +1,22 @@
+# Dependencias
+/backend/vendor
+/frontend/node_modules
+
+# Entornos (no se versionan; usar los .env.example)
+/backend/.env
+/frontend/.env
+
+# Build del frontend
+/frontend/dist
+
+# Logs y cachés de Laravel
+/backend/storage/*.key
+/backend/storage/logs/*.log
+/backend/storage/framework/cache/data/*
+/backend/storage/framework/sessions/*
+/backend/storage/framework/views/*.php
+/backend/bootstrap/cache/*.php
+
+# Sistema
+.DS_Store
+Thumbs.db
